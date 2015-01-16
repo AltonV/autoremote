@@ -14,11 +14,11 @@ If you don't know how to get your personal key [follow this link](http://joaoapp
 ## Usage
 
 ### Executable
-    $ autoremote add NAME KEY            Save device"
-    $ autoremote remove NAME             Removes device"
-    $ autoremote list [WITHKEY]          Lists all devices"
-    $ autoremote message NAME MESSAGE    Send a message to a device"
-    $ autoremote register NAME HOST      Register this computer to the device"
+    $ autoremote add NAME KEY            Save device
+    $ autoremote remove NAME             Removes device
+    $ autoremote list [WITHKEY]          Lists all devices. Displays keys if WITHKEY equals to true, t, yes, y, ja, j or 1
+    $ autoremote message NAME MESSAGE    Send a message to a device
+    $ autoremote register NAME HOST      Register this computer to the device
 
 ### Library
 
@@ -47,7 +47,7 @@ AutoRemote.registerOnDevice( device, host )
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/autoremote/fork )
+1. Fork it ( https://github.com/AltonV/autoremote/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
