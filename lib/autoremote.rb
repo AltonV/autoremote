@@ -27,11 +27,14 @@ module AutoRemote
     MSGURL = "http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%&message=%MESSAGE%&sender=%SENDER_ID%"
     VALIDATIONURL = "http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%"
     
-    ## Add a device
+    # Add a device
+    # @param name [String] The name of the device
+    # @param key [String] The personal key of the device
+    # @raise [AutoRemote::DeviceAlreadyExist] if the device already exits
     def AutoRemote::addDevice( name, key )
         ## Check if the name is taken
         if Device.find_by_name( name ) || Device.find_by_key(key)
-            raise self::DeviceAlreadyExist#
+            raise self::DeviceAlreadyExist
         end
         
         ## Validate key
@@ -45,31 +48,38 @@ module AutoRemote
         
         ## Save the device
         Device.create(:name => name, :key => key)
-        return true
     end
     
-    ## Remove a specific device
+    # Remove a specific device
+    # @param name [String] The name of the device
+    # @raise [AutoRemote::DeviceNotFound] if the device didn't exist
     def AutoRemote::removeDevice( name )
         if device = Device.find_by_name(name)
             
             ## Remove the device
-            return Device.delete(device.id)
+            Device.delete(device.id)
         else
             raise self::DeviceNotFound
         end
     end
     
-    ## Returns a list with all devices
+    # Returns a list with all devices
+    # @return [Device::ActiveRecord_Relation]
     def AutoRemote::listDevices
         return Device.order("name").all
     end
     
-    ## Returns one specific device
+    # Returns one specific device
+    # @return [Device]
     def AutoRemote::getDevice( name )
         return Device.find_by_name( name )
     end
     
-    ## Send a message to a device
+    # Sends a message to a device
+    # @param device [Device, String] A device object or the name of the device
+    # @param message [String] The message to send
+    # @raise [AutoRemote::DeviceNotFound] if the device didn't exits
+    # @raise [TypeError] if message isn't a string
     def AutoRemote::sendMessage( device, message )
         if ! device.kind_of?( Device ) && ! ( device = Device.find_by_name( device ) )
             raise self::DeviceNotFound
@@ -89,11 +99,13 @@ module AutoRemote
         if result.body != "OK"
             raise self::InvalidKey
         end
-        
-        return true
     end
     
-    ## Register on the device
+    # Register on the device
+    # @param device [Device, String] A device object or the name of the device
+    # @param remotehost [String] The public hostname or ip-address
+    # @raise [AutoRemote::DeviceNotFound] if the device didn't exits
+    # @raise [TypeError] if message isn't a string or less than 5 characters
     def AutoRemote::registerOnDevice( device, remotehost )
         
         if ! device.kind_of?( Device ) && ! ( device = Device.find_by_name( device ) )
@@ -113,8 +125,6 @@ module AutoRemote
         if ! result
             raise self::AutoRemoteException, "Something went wrong when registering on the device"
         end
-        
-        return true
     end
     
     ## Define alases for some methods
