@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
     spec.authors       = ["Yurij"]
     spec.email         = ["yurij@yurijware.com"]
     spec.summary       = %q{A library for interacting with autoremote devices http://joaoapps.com/autoremote/}
-    spec.homepage      = ""
+    spec.homepage      = "https://github.com/AltonV/autoremote"
     spec.license       = "MIT"
     
     spec.files         = `git ls-files -z`.split("\x0")
