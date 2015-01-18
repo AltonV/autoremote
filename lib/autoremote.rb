@@ -31,6 +31,7 @@ module AutoRemote
     # @param name [String] The name of the device
     # @param key [String] The personal key of the device
     # @raise [AutoRemote::DeviceAlreadyExist] if the device already exits
+    # @return [void]
     def AutoRemote::addDevice( name, key )
         ## Check if the name is taken
         if Device.find_by_name( name ) || Device.find_by_key(key)
@@ -38,10 +39,9 @@ module AutoRemote
         end
         
         ## Validate key
-        url = URI.parse( VALIDATIONURL.sub( /%YOUR_KEY%/, key ) )
-        result = Net::HTTP.start(url.host, url.port) {|http|
-            http.request( Net::HTTP::Get.new( url.to_s ) )
-        }
+        result = self.urlRequest( VALIDATIONURL.sub( /%YOUR_KEY%/, key ) )
+        
+        ## Check result
         if result.body != "OK"
             raise self::InvalidKey
         end
@@ -53,6 +53,7 @@ module AutoRemote
     # Remove a specific device
     # @param name [String] The name of the device
     # @raise [AutoRemote::DeviceNotFound] if the device didn't exist
+    # @return [void]
     def AutoRemote::removeDevice( name )
         if device = Device.find_by_name(name)
             
@@ -80,6 +81,7 @@ module AutoRemote
     # @param message [String] The message to send
     # @raise [AutoRemote::DeviceNotFound] if the device didn't exits
     # @raise [TypeError] if message isn't a string
+    # @return [void]
     def AutoRemote::sendMessage( device, message )
         if ! device.kind_of?( Device ) && ! ( device = Device.find_by_name( device ) )
             raise self::DeviceNotFound
@@ -90,10 +92,7 @@ module AutoRemote
         hostname = `hostname`.strip
         
         ## Send the message
-        url = URI.parse( MSGURL.sub( /%YOUR_KEY%/, device.key ).sub( /%MESSAGE%/, message ).sub( /%SENDER_ID%/, hostname ) )
-        result = Net::HTTP.start(url.host, url.port) {|http|
-            http.request( Net::HTTP::Get.new( url.to_s ) )
-        }
+        result = self.urlRequest( MSGURL.sub( /%YOUR_KEY%/, device.key ).sub( /%MESSAGE%/, message ).sub( /%SENDER_ID%/, hostname ) )
         
         ## Check result
         if result.body != "OK"
@@ -106,6 +105,7 @@ module AutoRemote
     # @param remotehost [String] The public hostname or ip-address
     # @raise [AutoRemote::DeviceNotFound] if the device didn't exits
     # @raise [TypeError] if message isn't a string or less than 5 characters
+    # @return [void]
     def AutoRemote::registerOnDevice( device, remotehost )
         
         if ! device.kind_of?( Device ) && ! ( device = Device.find_by_name( device ) )
@@ -133,5 +133,16 @@ module AutoRemote
         alias :deleteDevice :removeDevice
         alias :sendMsg :sendMessage
         alias :regOnDevice :registerOnDevice
+    end
+    
+    private
+    # Performs a http request
+    # @param url [String]
+    def AutoRemote::urlRequest( url )
+        url = URI.parse( url )
+        result = Net::HTTP.start(url.host, url.port) {|http|
+            http.request( Net::HTTP::Get.new( url.to_s ) )
+        }
+        return result
     end
 end
