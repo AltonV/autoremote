@@ -3,11 +3,13 @@
 [![Gem Version](http://img.shields.io/gem/v/autoremote.svg)][gem]
 [![Dependency Status](http://img.shields.io/gemnasium/AltonV/autoremote.svg)][gemnasium]
 [![Gem Downloads](https://img.shields.io/gem/dt/autoremote.svg)][gem]
+[![Code Climate](https://codeclimate.com/github/AltonV/autoremote/badges/gpa.svg)][codeclimate]
 
 [licence]: http://choosealicense.com/licenses/mit/
 [gem]: https://rubygems.org/gems/autoremote
 [gemnasium]: https://gemnasium.com/AltonV/autoremote
 [bitdeli]: https://bitdeli.com/free "Bitdeli Badge"
+[codeclimate]: https://codeclimate.com/github/AltonV/autoremote
 
 A library that makes it easier to interact with your other autoremote devices.  
 This project incudes both a library and an executable that uses the library.
