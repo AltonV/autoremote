@@ -6,8 +6,8 @@ require 'autoremote/version'
 Gem::Specification.new do |spec|
     spec.name          = "autoremote"
     spec.version       = AutoRemote::VERSION
-    spec.authors       = ["Yurij"]
-    spec.email         = ["yurij@yurijware.com"]
+    spec.authors       = [ "AltonV" ]
+    spec.email         = [ "altonv@yurijware.com" ]
     spec.summary       = %q{A library for interacting with autoremote devices http://joaoapps.com/autoremote/}
     spec.homepage      = "https://github.com/AltonV/autoremote"
     spec.license       = "MIT"
