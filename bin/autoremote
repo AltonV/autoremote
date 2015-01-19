@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'autoremote'
+require 'rbconfig'
 
 def to_bool( string )
     return false if string.class == NilClass || string.empty? || string.downcase =~ (/^(false|f|no|n|nej|0)$/i)
@@ -61,6 +62,15 @@ elsif arg0 == "message" && ARGV[1] && ARGV[2]
     end
     
 elsif arg0 == "register" && ARGV[1] && ARGV[2]
+    if RbConfig::CONFIG['host_os'] =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/i
+        puts "Are you sure you want to register a windows computer?"
+        print "You will need an SSH server on the computer. (y/n)"
+        if ! to_bool($stdin.gets.chomp)
+            puts "Registering interrupted"
+            exit
+        end
+    end
+    
     begin
         AutoRemote::registerOnDevice( ARGV[1], ARGV[2] )
         puts "Device registered successfully"
