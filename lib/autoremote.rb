@@ -3,7 +3,7 @@ require "autoremote/exceptions"
 require 'sqlite3'
 require 'active_record'
 require 'net/http'
-require 'rbconfig'
+require 'socket'
 
 ## Establish the database connection
 ActiveRecord::Base.establish_connection(
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define do
 end
 
 module AutoRemote
-    REGCMD = "curl \"http://autoremotejoaomgcd.appspot.com/registerpc?key=%YOUR_KEY%&name=%DISPLAY_NAME%&id=%UNIQUE_ID%&type=linux&publicip=%PUBLIC_HOST%&localip=$(sudo ifconfig eth0 |grep \"inet addr\" |awk '{print $2}' |awk -F: '{print $2}')\""
+    REGURL = "http://autoremotejoaomgcd.appspot.com/registerpc?key=%YOUR_KEY%&name=%DISPLAY_NAME%&id=%UNIQUE_ID%&type=linux&publicip=%PUBLIC_HOST%&localip=%IP_ADDRESS%"
     MSGURL = "http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%&message=%MESSAGE%&sender=%SENDER_ID%"
     VALIDATIONURL = "http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%"
     
@@ -109,24 +109,20 @@ module AutoRemote
     # @raise [TypeError] if message isn't a string or less than 5 characters
     # @return [void]
     def AutoRemote::registerOnDevice( device, remotehost )
-        
-        if RbConfig::CONFIG['host_os'] =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/i
-            raise self::UnsupportedAction, "Windows not supported"
-        elsif ! device.kind_of?( Device ) && ! ( device = Device.find_by_name( device ) )
+        if ! device.kind_of?( Device ) && ! ( device = Device.find_by_name( device ) )
             raise self::DeviceNotFound
         elsif ! remotehost.kind_of?( String ) || remotehost.length < 5
             raise ArgumentError, "remotehost must be a string of 5 chars or more"
         end
         
         hostname = `hostname`.strip
+        ipAddress = AutoRemote::getIpAddress.ip_address
         
         ## Perform the registration
-        cmd = REGCMD.sub( /%YOUR_KEY%/, device.key ).sub(/%DISPLAY_NAME%/, hostname ).sub(/%UNIQUE_ID%/, hostname ).sub(/%PUBLIC_HOST%/, remotehost )
-        result = system(cmd)
-        puts
+        result = self.urlRequest( REGURL.sub( /%YOUR_KEY%/, device.key ).sub(/%DISPLAY_NAME%/, hostname ).sub(/%UNIQUE_ID%/, hostname ).sub(/%PUBLIC_HOST%/, remotehost ).sub(/%IP_ADDRESS%/, ipAddress ) )
         
         ## Check result
-        if ! result
+        if result.body != "OK"
             raise self::AutoRemoteException, "Something went wrong when registering on the device"
         end
     end
@@ -140,6 +136,12 @@ module AutoRemote
     end
     
     private
+    # Gets the ip address of the system
+    # @return [String]
+    def AutoRemote::getIpAddress
+        return Socket.ip_address_list.detect{|ipInfo| ipInfo.ipv4_private?}
+    end
+    
     # Performs a http request
     # @param url [String]
     def AutoRemote::urlRequest( url )
