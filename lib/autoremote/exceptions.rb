@@ -20,4 +20,10 @@ module AutoRemote
         end
     end
     
+    class UnsupportedAction < AutoRemoteException
+        def message
+            "The key is invalid"
+        end
+    end
+    
 end

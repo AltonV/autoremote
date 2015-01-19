@@ -3,6 +3,7 @@ require "autoremote/exceptions"
 require 'sqlite3'
 require 'active_record'
 require 'net/http'
+require 'rbconfig'
 
 ## Establish the database connection
 ActiveRecord::Base.establish_connection(
@@ -104,11 +105,14 @@ module AutoRemote
     # @param device [Device, String] A device object or the name of the device
     # @param remotehost [String] The public hostname or ip-address
     # @raise [AutoRemote::DeviceNotFound] if the device didn't exits
+    # @raise [AutoRemote::UnsupportedAction] if running from windows
     # @raise [TypeError] if message isn't a string or less than 5 characters
     # @return [void]
     def AutoRemote::registerOnDevice( device, remotehost )
         
-        if ! device.kind_of?( Device ) && ! ( device = Device.find_by_name( device ) )
+        if RbConfig::CONFIG['host_os'] =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/i
+            raise self::UnsupportedAction, "Windows not supported"
+        elsif ! device.kind_of?( Device ) && ! ( device = Device.find_by_name( device ) )
             raise self::DeviceNotFound
         elsif ! remotehost.kind_of?( String ) || remotehost.length < 5
             raise ArgumentError, "remotehost must be a string of 5 chars or more"
