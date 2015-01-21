@@ -6,8 +6,8 @@ require 'autoremote/version'
 Gem::Specification.new do |spec|
     spec.name          = "autoremote"
     spec.version       = AutoRemote::VERSION
-    spec.authors       = [ "AltonV" ]
-    spec.email         = [ "altonv@yurijware.com" ]
+    spec.authors       = [ "Magnus Smedberg" ]
+    spec.email         = [ "magnus.smedberg@yurijware.com" ]
     spec.summary       = %q{A library for interacting with autoremote devices http://joaoapps.com/autoremote/}
     spec.homepage      = "https://github.com/AltonV/autoremote"
     spec.license       = "MIT"
@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
     
     spec.add_runtime_dependency 'activerecord', '~> 4.2', '~> 4.2'
     spec.add_runtime_dependency 'sqlite3', '~> 1.3', '~> 1.3'
+    spec.add_runtime_dependency 'httparty', '~> 0.13', '~> 0.13'
 end
