@@ -4,6 +4,7 @@ require 'sqlite3'
 require 'active_record'
 require 'net/http'
 require 'socket'
+require 'httparty'
 
 ## Establish the database connection
 ActiveRecord::Base.establish_connection(
@@ -30,25 +31,41 @@ module AutoRemote
     
     # Add a device
     # @param name [String] The name of the device
-    # @param key [String] The personal key of the device
+    # @param input [String] Can either be the 'goo.gl' url or the personal key of the device
     # @raise [AutoRemote::DeviceAlreadyExist] if the device already exits
+    # @raise [AutoRemote::InvalidKey] if the key or url is invalid
     # @return [void]
-    def AutoRemote::addDevice( name, key )
-        ## Check if the name is taken
-        if Device.find_by_name( name ) || Device.find_by_key(key)
+    def AutoRemote::addDevice( name, input )
+        
+        ## Validation if input is a 'goo.gl' url
+        if input.match( /^(https?:\/{2})?(goo.gl\/[\S]*)$/i )
+            result = self.urlRequest( input )
+            
+            ## Get the key from the resulting url
+            begin
+                input = CGI.parse( result.request.last_uri.query )['key'][0]
+            rescue
+                raise self::InvalidKey
+            end
+            
+        ## If not a 'goo.gl' url, check if it is a valid key
+        else
+            ## Validate key
+            result = self.urlRequest( VALIDATIONURL.sub( /%YOUR_KEY%/, input ) )
+            
+            ## Check result
+            if result.body != "OK"
+                raise self::InvalidKey
+            end
+        end
+        
+        ## Check if the device already exist
+        if Device.find_by_name( name ) || Device.find_by_key( input )
             raise self::DeviceAlreadyExist
         end
         
-        ## Validate key
-        result = self.urlRequest( VALIDATIONURL.sub( /%YOUR_KEY%/, key ) )
-        
-        ## Check result
-        if result.body != "OK"
-            raise self::InvalidKey
-        end
-        
         ## Save the device
-        Device.create(:name => name, :key => key)
+        Device.create(:name => name, :key => input)
     end
     
     # Remove a specific device
@@ -145,10 +162,11 @@ module AutoRemote
     # Performs a http request
     # @param url [String]
     def AutoRemote::urlRequest( url )
-        url = URI.parse( url )
-        result = Net::HTTP.start(url.host, url.port) {|http|
-            http.request( Net::HTTP::Get.new( url.to_s ) )
-        }
-        return result
+        ## Add http:// to the url if not present
+        if ! url.match( /^https?:\/{2}/i )
+            url = "http://" + url
+        end
+        
+        return HTTParty.get( url )
     end
 end
