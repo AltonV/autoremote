@@ -14,6 +14,7 @@ def print_help
     puts "\nArguments:"
     puts "    add DEVICE KEY             Save device"
     puts "    remove DEVICE              Removes device"
+    puts "    delete DEVICE              Same as above"
     puts "    list [WITHKEY]             Lists all devices"
     puts "    message DEVICE MESSAGE     Send a message to a device"
     puts "    register DEVICE HOST       Register this computer to the device"
@@ -34,7 +35,7 @@ elsif arg0 == "add" && ARGV[1] && ARGV[2]
         puts "Error: #{e.message}"
     end
     
-elsif arg0 == "remove" && ARGV[1]
+elsif ( arg0 == "remove" || arg0 == "delete" ) && ARGV[1]
     puts "Removing device"
     begin
         AutoRemote.removeDevice( ARGV[1] )
