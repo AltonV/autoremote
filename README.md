@@ -16,7 +16,8 @@ This project incudes both a library and an executable that uses the library.
 
 Devices are saved with sqlite3 in ~/.autoremote/devices.db
 
-If you don't know how to get your personal key [follow this link](http://joaoapps.com/autoremote/personal/)
+If you don't know how to get your personal key [follow this link](http://joaoapps.com/autoremote/personal/)  
+Since version 0.1.0 you can use the goo.gl url instead of the key when adding devices.  
 
 ## Installation
 
@@ -25,7 +26,7 @@ If you don't know how to get your personal key [follow this link](http://joaoapp
 ## Usage
 
 ### Executable
-    $ autoremote add NAME KEY            Save device
+    $ autoremote add NAME KEY|URL        Save device
     $ autoremote remove NAME             Removes device
     $ autoremote delete NAME             Same as above
     $ autoremote list [WITHKEY]          Lists all devices. Displays keys if WITHKEY equals to true, t, yes, y, ja, j or 1
@@ -37,8 +38,10 @@ If you don't know how to get your personal key [follow this link](http://joaoapp
 ```ruby
 require 'autoremote'
 
-# This will save a device for use later
-AutoRemote.addDevice( name, key )
+# Adding devices can be done either with the key
+AutoRemote.addDevice( name, "A VERY LONG STRING OF CHARACTERS" )
+# Or with your 'goo.gl' address
+AutoRemote.addDevice( name, "http://goo.gl/XXXXXX" )
 
 # Removes a device
 AutoRemote.removeDevice( name )
