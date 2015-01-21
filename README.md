@@ -27,6 +27,7 @@ If you don't know how to get your personal key [follow this link](http://joaoapp
 ### Executable
     $ autoremote add NAME KEY            Save device
     $ autoremote remove NAME             Removes device
+    $ autoremote delete NAME             Same as above
     $ autoremote list [WITHKEY]          Lists all devices. Displays keys if WITHKEY equals to true, t, yes, y, ja, j or 1
     $ autoremote message NAME MESSAGE    Send a message to a device
     $ autoremote register NAME HOST      Register this computer to the device
