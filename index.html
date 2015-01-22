@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Autoremote : A ruby gem for interacting with autoremote devices">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Autoremote</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/AltonV/autoremote">View on GitHub</a>
+
+          <h1 id="project_title">Autoremote</h1>
+          <h2 id="project_tagline">A ruby gem for interacting with autoremote devices</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/AltonV/autoremote/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/AltonV/autoremote/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="autoremote" class="anchor" href="#autoremote" aria-hidden="true"><span class="octicon octicon-link"></span></a>Autoremote</h1>
+
+<p><a href="http://choosealicense.com/licenses/mit/"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Licence"></a>
+<a href="https://rubygems.org/gems/autoremote"><img src="http://img.shields.io/gem/v/autoremote.svg" alt="Gem Version"></a>
+<a href="https://gemnasium.com/AltonV/autoremote"><img src="http://img.shields.io/gemnasium/AltonV/autoremote.svg" alt="Dependency Status"></a>
+<a href="https://rubygems.org/gems/autoremote"><img src="https://img.shields.io/gem/dt/autoremote.svg" alt="Gem Downloads"></a>
+<a href="https://codeclimate.com/github/AltonV/autoremote"><img src="https://codeclimate.com/github/AltonV/autoremote/badges/gpa.svg" alt="Code Climate"></a></p>
+
+<p>A library that makes it easier to interact with your other autoremote devices.<br>
+This project incudes both a library and an executable that uses the library.</p>
+
+<p>Devices are saved with sqlite3 in ~/.autoremote/devices.db</p>
+
+<p>If you don't know how to get your personal key <a href="http://joaoapps.com/autoremote/personal/">follow this link</a><br>
+Since version 0.1.0 you can use the goo.gl url instead of the key when adding devices.  </p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<pre><code>$ gem install autoremote
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="executable" class="anchor" href="#executable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Executable</h3>
+
+<pre><code>$ autoremote add NAME KEY|URL        Save device
+$ autoremote remove NAME             Removes device
+$ autoremote delete NAME             Same as above
+$ autoremote list [WITHKEY]          Lists all devices. Displays keys if WITHKEY equals to true, t, yes, y, ja, j or 1
+$ autoremote message NAME MESSAGE    Send a message to a device
+$ autoremote register NAME HOST      Register this computer to the device
+</code></pre>
+
+<h3>
+<a id="library" class="anchor" href="#library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Library</h3>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-k">require</span> <span class="pl-s1"><span class="pl-pds">'</span>autoremote<span class="pl-pds">'</span></span>
+
+<span class="pl-c"># Adding devices can be done either with the key</span>
+<span class="pl-s3">AutoRemote</span>.addDevice( name, <span class="pl-s1"><span class="pl-pds">"</span>A VERY LONG STRING OF CHARACTERS<span class="pl-pds">"</span></span> )
+<span class="pl-c"># Or with your 'goo.gl' address</span>
+<span class="pl-s3">AutoRemote</span>.addDevice( name, <span class="pl-s1"><span class="pl-pds">"</span>http://goo.gl/XXXXXX<span class="pl-pds">"</span></span> )
+
+<span class="pl-c"># Removes a device</span>
+<span class="pl-s3">AutoRemote</span>.removeDevice( name )
+
+<span class="pl-c"># List all saved devices</span>
+<span class="pl-s3">AutoRemote</span>.list
+
+<span class="pl-c"># Send a message to a device</span>
+<span class="pl-c"># The parameter device can either be a Device object or the name of the device</span>
+<span class="pl-s3">AutoRemote</span>.sendMessage( device, message )
+
+<span class="pl-c"># Register on the device.</span>
+<span class="pl-c"># This has the same effect as following the guide on http://joaoapps.com/autoremote/linux/)</span>
+<span class="pl-c"># device can either be a Device object or the name of the device</span>
+<span class="pl-c"># host can be either a hostname or ip-address, but they have to be public (i.e. reachable from the internet)</span>
+<span class="pl-s3">AutoRemote</span>.registerOnDevice( device, host )</pre></div>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<ol>
+<li>Fork it ( <a href="https://github.com/AltonV/autoremote/fork">https://github.com/AltonV/autoremote/fork</a> )</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create a new Pull Request</li>
+</ol>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Autoremote maintained by <a href="https://github.com/AltonV">AltonV</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
