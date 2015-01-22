@@ -9,7 +9,6 @@
 [licence]: http://choosealicense.com/licenses/mit/
 [gem]: https://rubygems.org/gems/autoremote
 [gemnasium]: https://gemnasium.com/AltonV/autoremote
-[bitdeli]: https://bitdeli.com/free "Bitdeli Badge"
 [codeclimate]: https://codeclimate.com/github/AltonV/autoremote
 [inch-ci]: http://inch-ci.org/github/AltonV/autoremote
 
