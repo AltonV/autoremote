@@ -109,7 +109,7 @@ module AutoRemote
         hostname = `hostname`.strip
         
         ## Send the message
-        result = self.urlRequest(MSGURL.sub(/%YOUR_KEY%/, device.key).sub(/%MESSAGE%/, message).sub(/%SENDER_ID%/, hostname))
+        result = self.urlRequest(MSGURL.sub(/%YOUR_KEY%/, device.key).sub(/%MESSAGE%/, CGI.escape(message)).sub(/%SENDER_ID%/, hostname))
         
         ## Check result
         if result.body != 'OK'
