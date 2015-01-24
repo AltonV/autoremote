@@ -25,9 +25,9 @@ ActiveRecord::Schema.define do
 end
 
 module AutoRemote
-    REGURL = 'http://autoremotejoaomgcd.appspot.com/registerpc?key=%YOUR_KEY%&name=%DISPLAY_NAME%&id=%UNIQUE_ID%&type=linux&publicip=%PUBLIC_HOST%&localip=%IP_ADDRESS%'
-    MSGURL = 'http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%&message=%MESSAGE%&sender=%SENDER_ID%'
-    VALIDATIONURL = 'http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%'
+    REG_URL = 'http://autoremotejoaomgcd.appspot.com/registerpc?key=%YOUR_KEY%&name=%DISPLAY_NAME%&id=%UNIQUE_ID%&type=linux&publicip=%PUBLIC_HOST%&localip=%IP_ADDRESS%'
+    MSG_URL = 'http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%&message=%MESSAGE%&sender=%SENDER_ID%'
+    VALIDATION_URL = 'http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%'
     
     # Add a device
     # @param name [String] The name of the device
@@ -51,7 +51,7 @@ module AutoRemote
         ## If not a 'goo.gl' url, check if it is a valid key
         else
             ## Validate key
-            result = self.url_request(VALIDATIONURL.sub(/%YOUR_KEY%/, input))
+            result = self.url_request(VALIDATION_URL.sub(/%YOUR_KEY%/, input))
             
             ## Check result
             if result.body != 'OK'
@@ -109,7 +109,7 @@ module AutoRemote
         hostname = `hostname`.strip
         
         ## Send the message
-        result = self.url_request(MSGURL.sub(/%YOUR_KEY%/, device.key).sub(/%MESSAGE%/, CGI.escape(message)).sub(/%SENDER_ID%/, hostname))
+        result = self.url_request(MSG_URL.sub(/%YOUR_KEY%/, device.key).sub(/%MESSAGE%/, CGI.escape(message)).sub(/%SENDER_ID%/, hostname))
         
         ## Check result
         if result.body != 'OK'
@@ -135,7 +135,7 @@ module AutoRemote
         ipAddress = AutoRemote::get_ip_address.ip_address
         
         ## Perform the registration
-        result = self.url_request(REGURL.sub(/%YOUR_KEY%/, device.key).sub(/%DISPLAY_NAME%/, hostname).sub(/%UNIQUE_ID%/, hostname).sub(/%PUBLIC_HOST%/, remotehost).sub(/%IP_ADDRESS%/, ipAddress))
+        result = self.url_request(REG_URL.sub(/%YOUR_KEY%/, device.key).sub(/%DISPLAY_NAME%/, hostname).sub(/%UNIQUE_ID%/, hostname).sub(/%PUBLIC_HOST%/, remotehost).sub(/%IP_ADDRESS%/, ipAddress))
         
         ## Check result
         if result.body != 'OK'
