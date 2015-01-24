@@ -23,9 +23,13 @@ end
 
 arg0 = ARGV[0].downcase if ARGV[0]
 
+# Prints help
 if arg0 == 'help' || arg0 == '-h' || arg0 == '--help'
     print_help
+
+# Add device
 elsif arg0 == 'add' && ARGV[1] && ARGV[2]
+
     puts 'Adding device'
     begin
         AutoRemote.addDevice(ARGV[1], ARGV[2])
@@ -33,7 +37,10 @@ elsif arg0 == 'add' && ARGV[1] && ARGV[2]
     rescue Exception => e
         puts "Error: #{e.message}"
     end
+
+# Remove device
 elsif ( arg0 == 'remove' || arg0 == 'delete' ) && ARGV[1]
+
     puts 'Removing device'
     begin
         AutoRemote.removeDevice(ARGV[1])
@@ -41,23 +48,31 @@ elsif ( arg0 == 'remove' || arg0 == 'delete' ) && ARGV[1]
     rescue Exception => e
         puts "Error: #{e.message}"
     end
+
+# List all devices
 elsif arg0 == 'list'
     withkey = to_bool(ARGV[1])
     puts 'Listing devices'
-    
+
     AutoRemote.listDevices.each do|device|
         print "Name: #{device.name}"
         print "    Key: #{device.key}" if withkey
         puts
     end
+
+# Send message to a device
 elsif arg0 == 'message' && ARGV[1] && ARGV[2]
+
     begin
         AutoRemote.sendMessage(ARGV[1], ARGV[2])
         puts 'Message sent successfully'
     rescue Exception => e
         puts "Error: #{e.message}"
     end
+
+# Register on a device
 elsif arg0 == 'register' && ARGV[1] && ARGV[2]
+
     if RbConfig::CONFIG['host_os'] =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/i
         puts 'Are you sure you want to register a windows computer?'
         print 'You will need an SSH server on the computer. (y/n)'
@@ -66,13 +81,15 @@ elsif arg0 == 'register' && ARGV[1] && ARGV[2]
             exit
         end
     end
-    
+
     begin
         AutoRemote.registerOnDevice(ARGV[1], ARGV[2])
         puts 'Device registered successfully'
     rescue Exception => e
         puts "Error: #{e.message}"
     end
+
+# Prints help if arguments are invalid
 else
     print_help
 end
