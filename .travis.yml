@@ -21,4 +21,8 @@ matrix:
     - rvm: jruby-19mode
     - rvm: jruby
     
+before_install:
+  - gem update --system
+  - gem --version
+  
 script: bundle exec rspec
