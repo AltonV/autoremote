@@ -35,11 +35,11 @@ module AutoRemote
     # @raise [AutoRemote::DeviceAlreadyExist] if the device already exits
     # @raise [AutoRemote::InvalidKey] if the key or url is invalid
     # @return [void]
-    def AutoRemote::addDevice(name, input)
+    def AutoRemote::add_device(name, input)
         
         ## Validation if input is a 'goo.gl' url
         if input.match(/^(https?:\/{2})?(goo.gl\/[\S]*)$/i)
-            result = self.urlRequest(input)
+            result = self.url_request(input)
             
             ## Get the key from the resulting url
             begin
@@ -51,7 +51,7 @@ module AutoRemote
         ## If not a 'goo.gl' url, check if it is a valid key
         else
             ## Validate key
-            result = self.urlRequest(VALIDATIONURL.sub(/%YOUR_KEY%/, input))
+            result = self.url_request(VALIDATIONURL.sub(/%YOUR_KEY%/, input))
             
             ## Check result
             if result.body != 'OK'
@@ -72,7 +72,7 @@ module AutoRemote
     # @param name [String] The name of the device
     # @raise [AutoRemote::DeviceNotFound] if the device didn't exist
     # @return [void]
-    def AutoRemote::removeDevice(name)
+    def AutoRemote::remove_device(name)
         if device = Device.find_by_name(name)
             ## Remove the device
             Device.delete(device.id)
@@ -83,13 +83,13 @@ module AutoRemote
     
     # Returns a list with all devices
     # @return [Device::ActiveRecord_Relation]
-    def AutoRemote::listDevices
+    def AutoRemote::list_devices
         return Device.order('name').all
     end
     
     # Returns one specific device
     # @return [Device]
-    def AutoRemote::getDevice(name)
+    def AutoRemote::get_device(name)
         return Device.find_by_name(name)
     end
     
@@ -99,7 +99,7 @@ module AutoRemote
     # @raise [AutoRemote::DeviceNotFound] if the device didn't exits
     # @raise [TypeError] if message isn't a string
     # @return [void]
-    def AutoRemote::sendMessage(device, message)
+    def AutoRemote::send_message(device, message)
         if ! device.kind_of?(Device) && ! (device = Device.find_by_name(device))
             raise self::DeviceNotFound
         elsif ! message.kind_of?(String)
@@ -109,7 +109,7 @@ module AutoRemote
         hostname = `hostname`.strip
         
         ## Send the message
-        result = self.urlRequest(MSGURL.sub(/%YOUR_KEY%/, device.key).sub(/%MESSAGE%/, CGI.escape(message)).sub(/%SENDER_ID%/, hostname))
+        result = self.url_request(MSGURL.sub(/%YOUR_KEY%/, device.key).sub(/%MESSAGE%/, CGI.escape(message)).sub(/%SENDER_ID%/, hostname))
         
         ## Check result
         if result.body != 'OK'
@@ -124,7 +124,7 @@ module AutoRemote
     # @raise [AutoRemote::UnsupportedAction] if running from windows
     # @raise [TypeError] if message isn't a string or less than 5 characters
     # @return [void]
-    def AutoRemote::registerOnDevice(device, remotehost)
+    def AutoRemote::register_on_device(device, remotehost)
         if ! device.kind_of?(Device) && ! (device = Device.find_by_name(device))
             raise self::DeviceNotFound
         elsif ! remotehost.kind_of?(String) || remotehost.length < 5
@@ -132,10 +132,10 @@ module AutoRemote
         end
         
         hostname = `hostname`.strip
-        ipAddress = AutoRemote::getIpAddress.ip_address
+        ipAddress = AutoRemote::get_ip_address.ip_address
         
         ## Perform the registration
-        result = self.urlRequest(REGURL.sub(/%YOUR_KEY%/, device.key).sub(/%DISPLAY_NAME%/, hostname).sub(/%UNIQUE_ID%/, hostname).sub(/%PUBLIC_HOST%/, remotehost).sub(/%IP_ADDRESS%/, ipAddress))
+        result = self.url_request(REGURL.sub(/%YOUR_KEY%/, device.key).sub(/%DISPLAY_NAME%/, hostname).sub(/%UNIQUE_ID%/, hostname).sub(/%PUBLIC_HOST%/, remotehost).sub(/%IP_ADDRESS%/, ipAddress))
         
         ## Check result
         if result.body != 'OK'
@@ -145,22 +145,38 @@ module AutoRemote
     
     ## Define alases for some methods
     class << AutoRemote
-        alias :saveDevice :addDevice
-        alias :deleteDevice :removeDevice
-        alias :sendMsg :sendMessage
-        alias :regOnDevice :registerOnDevice
+        # Add
+        alias :addDevice :add_device
+        alias :saveDevice :add_device
+        alias :save_device :add_device
+        # Remove
+        alias :removeDevice :remove_device
+        alias :deleteDevice :remove_device
+        alias :delete_device :remove_device
+        # List
+        alias :listDevices :list_devices
+        # Get
+        alias :getDevice :get_device
+        # Message
+        alias :sendMessage :send_message
+        alias :sendMsg :send_message
+        alias :send_msg :send_message
+        # Register
+        alias :registerOnDevice :register_on_device
+        alias :regOnDevice :register_on_device
+        alias :reg_on_device :register_on_device
     end
     
     private
     # Gets the ip address of the system
     # @return [String]
-    def AutoRemote::getIpAddress
+    def AutoRemote::get_ip_address
         return Socket.ip_address_list.detect { |ipInfo| ipInfo.ipv4_private? }
     end
     
     # Performs a http request
     # @param url [String]
-    def AutoRemote::urlRequest(url)
+    def AutoRemote::url_request(url)
         ## Add http:// to the url if not present
         url = 'http://' + url unless url.match(/^https?:\/{2}/i)
         

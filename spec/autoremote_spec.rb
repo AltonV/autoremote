@@ -7,13 +7,13 @@ TEST_KEY = 'APA91bFKEjtBfVU5WoJJ8KyfmR3LfmUpcVrePdQQ_T5oN1h8KcLptzhCvDE-FP1IQPim
 TEST_MSG = 'This is a test message'
 
 describe AutoRemote do
-    describe '#addDevice' do
+    describe '#add_device' do
         it 'adds a device' do
             AutoRemote.addDevice(TEST_NAME, TEST_URL)
         end
     end
 
-    describe '#listDevices' do
+    describe '#list_devices' do
         it 'returns a list of devices' do
             list = AutoRemote.listDevices
             expect(list).not_to eq(nil)
@@ -21,7 +21,7 @@ describe AutoRemote do
         end
     end
 
-    describe '#getDevice' do
+    describe '#get_device' do
         it 'returns a device' do
             device = AutoRemote.getDevice(TEST_NAME)
             expect(device).to be_instance_of(Device)
@@ -30,9 +30,9 @@ describe AutoRemote do
         end
     end
 
-    describe 'sends a message' do
-        it do
-            AutoRemote.sendMessage(TEST_NAME, TEST_MSG)
+    describe '#send_message' do
+        it 'sends a message to the device' do
+            AutoRemote.send_message(TEST_NAME, TEST_MSG)
         end
     end
 end
