@@ -35,4 +35,10 @@ describe AutoRemote do
             AutoRemote.send_message(TEST_NAME, TEST_MSG)
         end
     end
+
+    describe '#remove_device' do
+        it 'removes a device' do
+            AutoRemote.remove_device(TEST_NAME)
+        end
+    end
 end
