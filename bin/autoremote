@@ -8,6 +8,19 @@ def to_bool(string)
     raise ArgumentError, "Invalid value: #{string}"
 end
 
+# Prints the header for the list of devices
+def print_list_head(withkey)
+    puts 'Listing devices'
+
+    print 'Name'.rjust(18)
+    print '  Key' if withkey
+    puts
+
+    print '--------'.rjust(18)
+    print '  --------' if withkey
+    puts
+end
+
 ## Prints help
 def print_help
     puts 'AutoRemote v' + AutoRemote::VERSION
@@ -51,16 +64,17 @@ elsif ( arg0 == 'remove' || arg0 == 'delete' ) && ARGV[1]
 
 # List all devices
 elsif arg0 == 'list'
+
     withkey = to_bool(ARGV[1])
-    puts 'Listing devices'
+    print_list_head(withkey)
 
     AutoRemote.listDevices.each do|device|
-        print "Name: #{device.name}"
-        print "    Key: #{device.key}" if withkey
+        print "#{device.name}".rjust(18)
+        print "  #{device.key}" if withkey
         puts
     end
 
-# Send message to a device
+# Send a message to a device
 elsif arg0 == 'message' && ARGV[1] && ARGV[2]
 
     begin
@@ -73,6 +87,7 @@ elsif arg0 == 'message' && ARGV[1] && ARGV[2]
 # Register on a device
 elsif arg0 == 'register' && ARGV[1] && ARGV[2]
 
+    # Display a prompt if registering on windows
     if RbConfig::CONFIG['host_os'] =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/i
         puts 'Are you sure you want to register a windows computer?'
         print 'You will need an SSH server on the computer. (y/n)'
@@ -89,7 +104,7 @@ elsif arg0 == 'register' && ARGV[1] && ARGV[2]
         puts "Error: #{e.message}"
     end
 
-# Prints help if arguments are invalid
+# Display help if arguments are invalid
 else
     print_help
 end
