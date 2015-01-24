@@ -5,8 +5,8 @@ rvm:
   - 2.1.5
   - 2.2.0
   - rbx-2.1.1
-  - rbx-2.1.5
   - rbx-2.2.0
+  - rbx-2.3.0
   - rbx
   - jruby-19mode
   - jruby
@@ -15,8 +15,8 @@ matrix:
   fast_finish: true
   allow_failures:
     - rvm: rbx-2.1.1
-    - rvm: rbx-2.1.5
     - rvm: rbx-2.2.0
+    - rvm: rbx-2.3.0
     - rvm: rbx
     - rvm: jruby-19mode
     - rvm: jruby
@@ -25,4 +25,6 @@ before_install:
   - gem update --system
   - gem --version
   
+bundler_args: --jobs=1 --retry=3
+
 script: bundle exec rspec
