@@ -1,7 +1,8 @@
-require 'spec_helper.rb'
-require 'autoremote'
 require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
+
+require 'spec_helper.rb'
+require 'autoremote'
 
 TEST_NAME = 'TestDevice'
 TEST_URL = 'http://goo.gl/CyA66h'
