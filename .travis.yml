@@ -21,6 +21,11 @@ matrix:
     - rvm: jruby-19mode
     - rvm: jruby
     
+addons:
+  code_climate:
+    repo_token:
+      secure: "DUVG31yOL3GfE9FASaTXuTKWibxuGgiJItSXAFoSjQU3QYDcC/f/MH/58jfZnMy7Vrt36/RcuwBifCgBWNMkH0jHdYUtZyKkEyDxc98nKXD8R02uKFMhBVBvInakmDnAPfl75OO0A4peibZ+feHzv5NoK2wL4p3+eR3wLGWwLV4="
+
 before_install:
   - gem update --system
   - gem --version
