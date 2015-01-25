@@ -100,9 +100,11 @@ module AutoRemote
     # @raise [TypeError] if message isn't a string
     # @return [void]
     def AutoRemote::send_message(device, message)
-        if ! device.kind_of?(Device) && ! (device = Device.find_by_name(device))
+        device = self.validate_device(device)
+        
+        if !device
             raise self::DeviceNotFound
-        elsif ! message.kind_of?(String)
+        elsif ! message.is_a?(String)
             raise TypeError, 'Message must be a string'
         end
         
@@ -125,9 +127,11 @@ module AutoRemote
     # @raise [TypeError] if message isn't a string or less than 5 characters
     # @return [void]
     def AutoRemote::register_on_device(device, remotehost)
-        if ! device.kind_of?(Device) && ! (device = Device.find_by_name(device))
+        device = self.validate_device(device)
+        
+        if !device
             raise self::DeviceNotFound
-        elsif ! remotehost.kind_of?(String) || remotehost.length < 5
+        elsif ! remotehost.is_a?(String) || remotehost.length < 5
             raise ArgumentError, 'remotehost must be a string of 5 chars or more'
         end
         
@@ -168,6 +172,23 @@ module AutoRemote
     end
     
     private
+    # Validates device
+    # @param device the input to validate
+    # @return [Device] if the input is valid
+    # @return [nil] if the input is not valid
+    def AutoRemote::validate_device(input)
+        if input.is_a?(Device)
+            return input
+        else
+            device = Device.find_by_name(input)
+            if device.kind_of?(Device)
+                return device
+            else
+                return nil
+            end
+        end
+    end
+    
     # Gets the ip address of the system
     # @return [String]
     def AutoRemote::get_ip_address
