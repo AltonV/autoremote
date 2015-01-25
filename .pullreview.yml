@@ -1,0 +1,5 @@
+---
+rules:
+  ignore:
+  - remove_trailing_whitespace
+  
