@@ -1,10 +1,9 @@
+require 'autoremote/net'
 require 'autoremote/version'
 require 'autoremote/exceptions'
 require 'sqlite3'
 require 'active_record'
-require 'net/http'
 require 'socket'
-require 'httparty'
 
 ## Establish the database connection
 ActiveRecord::Base.establish_connection(
@@ -25,10 +24,6 @@ ActiveRecord::Schema.define do
 end
 
 module AutoRemote
-    REG_URL = 'http://autoremotejoaomgcd.appspot.com/registerpc?key=%YOUR_KEY%&name=%DISPLAY_NAME%&id=%UNIQUE_ID%&type=linux&publicip=%PUBLIC_HOST%&localip=%IP_ADDRESS%'
-    MSG_URL = 'http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%&message=%MESSAGE%&sender=%SENDER_ID%'
-    VALIDATION_URL = 'http://autoremotejoaomgcd.appspot.com/sendmessage?key=%YOUR_KEY%'
-    
     # Add a device
     # @param name [String] The name of the device
     # @param input [String] Can either be the 'goo.gl' url or the personal key of the device
@@ -39,7 +34,7 @@ module AutoRemote
         
         ## Validation if input is a 'goo.gl' url
         if input.match(/^(https?:\/{2})?(goo.gl\/[\S]*)$/i)
-            result = self.url_request(input)
+            result = AutoRemoteRequest.validate_url(input)
             
             ## Get the key from the resulting url
             begin
@@ -51,7 +46,7 @@ module AutoRemote
         ## If not a 'goo.gl' url, check if it is a valid key
         else
             ## Validate key
-            result = self.url_request(VALIDATION_URL.sub(/%YOUR_KEY%/, input))
+            result = AutoRemoteRequest.validate(device.key)
             
             ## Check result
             if result.body != 'OK'
@@ -108,10 +103,8 @@ module AutoRemote
             raise TypeError, 'Message must be a string'
         end
         
-        hostname = `hostname`.strip
-        
         ## Send the message
-        result = self.url_request(MSG_URL.sub(/%YOUR_KEY%/, device.key).sub(/%MESSAGE%/, CGI.escape(message)).sub(/%SENDER_ID%/, hostname))
+        result = AutoRemoteRequest.message(device.key, `hostname`.strip, CGI.escape(message))
         
         ## Check result
         if result.body != 'OK'
@@ -139,7 +132,7 @@ module AutoRemote
         ipAddress = AutoRemote::get_ip_address.ip_address
         
         ## Perform the registration
-        result = self.url_request(REG_URL.sub(/%YOUR_KEY%/, device.key).sub(/%DISPLAY_NAME%/, hostname).sub(/%UNIQUE_ID%/, hostname).sub(/%PUBLIC_HOST%/, remotehost).sub(/%IP_ADDRESS%/, ipAddress))
+        result = AutoRemoteRequest.register(device.key, hostname, hostname, remotehost, ipAddress)
         
         ## Check result
         if result.body != 'OK'
@@ -193,14 +186,5 @@ module AutoRemote
     # @return [String]
     def AutoRemote::get_ip_address
         return Socket.ip_address_list.detect { |ipInfo| ipInfo.ipv4_private? }
-    end
-    
-    # Performs a http request
-    # @param url [String]
-    def AutoRemote::url_request(url)
-        ## Add http:// to the url if not present
-        url = 'http://' + url unless url.match(/^https?:\/{2}/i)
-        
-        return HTTParty.get(url)
     end
 end
