@@ -40,25 +40,28 @@ Since version 0.1.0 you can use the goo.gl url instead of the key when adding de
 require 'autoremote'
 
 # Adding devices can be done either with the key
-AutoRemote.addDevice( name, "A VERY LONG STRING OF CHARACTERS" )
+AutoRemote.add_device( name, "A VERY LONG STRING OF CHARACTERS" )
 # Or with your 'goo.gl' address
-AutoRemote.addDevice( name, "http://goo.gl/XXXXXX" )
+AutoRemote.add_device( name, "http://goo.gl/XXXXXX" )
 
 # Removes a device
-AutoRemote.removeDevice( name )
+AutoRemote.remove_device( name )
 
 # List all saved devices
 AutoRemote.list
 
+# Get a specific device
+AutoRemote.get_device( name )
+
 # Send a message to a device
 # The parameter device can either be a Device object or the name of the device
-AutoRemote.sendMessage( device, message )
+AutoRemote.send_message( device, message )
 
 # Register on the device.
 # This has the same effect as following the guide on http://joaoapps.com/autoremote/linux/)
 # device can either be a Device object or the name of the device
 # host can be either a hostname or ip-address, but they have to be public (i.e. reachable from the internet)
-AutoRemote.registerOnDevice( device, host )
+AutoRemote.register_on_device( device, host )
 ```
 
 ## Contributing

@@ -8,6 +8,19 @@ def to_bool(string)
     raise ArgumentError, "Invalid value: #{string}"
 end
 
+# Prints the header for the list of devices
+def print_list_head(withkey)
+    puts 'Listing devices'
+
+    print 'Name'.rjust(18)
+    print '  Key' if withkey
+    puts
+
+    print '--------'.rjust(18)
+    print '  --------' if withkey
+    puts
+end
+
 ## Prints help
 def print_help
     puts 'AutoRemote v' + AutoRemote::VERSION
@@ -23,41 +36,58 @@ end
 
 arg0 = ARGV[0].downcase if ARGV[0]
 
+# Prints help
 if arg0 == 'help' || arg0 == '-h' || arg0 == '--help'
     print_help
+
+# Add device
 elsif arg0 == 'add' && ARGV[1] && ARGV[2]
+
     puts 'Adding device'
     begin
         AutoRemote.addDevice(ARGV[1], ARGV[2])
         puts 'Device added successfully'
-    rescue Exception => e
+    rescue StandardError => e
         puts "Error: #{e.message}"
     end
+
+# Remove device
 elsif ( arg0 == 'remove' || arg0 == 'delete' ) && ARGV[1]
+
     puts 'Removing device'
     begin
         AutoRemote.removeDevice(ARGV[1])
         puts 'Device removed successfully'
-    rescue Exception => e
+    rescue StandardError => e
         puts "Error: #{e.message}"
     end
+
+# List all devices
 elsif arg0 == 'list'
+
     withkey = to_bool(ARGV[1])
-    puts 'Listing devices'
-    
+    print_list_head(withkey)
+
     AutoRemote.listDevices.each do|device|
-        print "Name: #{device.name}"
-        print "    Key: #{device.key}" if withkey
+        print "#{device.name}".rjust(18)
+        print "  #{device.key}" if withkey
         puts
     end
+
+# Send a message to a device
 elsif arg0 == 'message' && ARGV[1] && ARGV[2]
+
     begin
         AutoRemote.sendMessage(ARGV[1], ARGV[2])
         puts 'Message sent successfully'
-    rescue Exception => e
+    rescue StandardError => e
         puts "Error: #{e.message}"
     end
+
+# Register on a device
 elsif arg0 == 'register' && ARGV[1] && ARGV[2]
+
+    # Display a prompt if registering on windows
     if RbConfig::CONFIG['host_os'] =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/i
         puts 'Are you sure you want to register a windows computer?'
         print 'You will need an SSH server on the computer. (y/n)'
@@ -66,13 +96,15 @@ elsif arg0 == 'register' && ARGV[1] && ARGV[2]
             exit
         end
     end
-    
+
     begin
         AutoRemote.registerOnDevice(ARGV[1], ARGV[2])
         puts 'Device registered successfully'
-    rescue Exception => e
+    rescue StandardError => e
         puts "Error: #{e.message}"
     end
+
+# Display help if arguments are invalid
 else
     print_help
 end
