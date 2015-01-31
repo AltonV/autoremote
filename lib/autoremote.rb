@@ -166,7 +166,7 @@ module AutoRemote
     
     private
     # Validates device
-    # @param device the input to validate
+    # @param input the input to validate
     # @return [Device] if the input is valid
     # @return [nil] if the input is not valid
     def AutoRemote::validate_device(input)
