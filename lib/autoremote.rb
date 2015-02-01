@@ -66,7 +66,8 @@ module AutoRemote
     # @return [true] if the device was deleted
     # @return [false] if the device wasn't found
     def AutoRemote::remove_device(name)
-        if device = Device.find_by_name(name)
+        device = Device.find_by_name(name)
+        if device
             ## Remove the device
             Device.delete(device.id)
             return true
