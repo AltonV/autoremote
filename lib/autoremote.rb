@@ -131,10 +131,9 @@ module AutoRemote
         end
         
         hostname = `hostname`.strip
-        ipAddress = AutoRemote::get_ip_address.ip_address
         
         ## Perform the registration
-        result = AutoRemoteRequest.register(device.key, hostname, hostname, remotehost, ipAddress)
+        result = AutoRemoteRequest.register(device.key, hostname, hostname, remotehost, AutoRemote::get_ip_address)
         
         ## Check result
         if result.body == 'OK'
@@ -189,6 +188,6 @@ module AutoRemote
     # Gets the ip address of the system
     # @return [String]
     def AutoRemote::get_ip_address
-        return Socket.ip_address_list.detect { |ipInfo| ipInfo.ipv4_private? }
+        return Socket.ip_address_list.detect(&:ipv4_private?).ip_address
     end
 end
