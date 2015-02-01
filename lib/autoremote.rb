@@ -7,8 +7,8 @@ require 'socket'
 
 ## Establish the database connection
 ActiveRecord::Base.establish_connection(
-    :adapter  => 'sqlite3',
-    :database => ENV['HOME'] + '/.autoremote/devices.db'
+    adapter:    'sqlite3',
+    database:   ENV['HOME'] + '/.autoremote/devices.db'
 )
 
 class Device < ActiveRecord::Base
@@ -57,7 +57,7 @@ module AutoRemote
             return nil
         else
             ## Save the device
-            return Device.create(:name => name, :key => input)
+            return Device.create(name: name, key: input)
         end
     end
     
