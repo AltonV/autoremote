@@ -4,12 +4,14 @@
 [![Dependency Status](http://img.shields.io/gemnasium/AltonV/autoremote.svg)][gemnasium]
 [![Gem Downloads](https://img.shields.io/gem/dt/autoremote.svg)][gem]
 [![Code Climate](https://codeclimate.com/github/AltonV/autoremote/badges/gpa.svg)][codeclimate]
+[![Coverage Status](https://coveralls.io/repos/AltonV/autoremote/badge.svg)][coveralls]
 [![Inline docs](http://inch-ci.org/github/AltonV/autoremote.svg?branch=master&style=shields)][inch-ci]
 
 [licence]: http://choosealicense.com/licenses/mit/
 [gem]: https://rubygems.org/gems/autoremote
 [gemnasium]: https://gemnasium.com/AltonV/autoremote
 [codeclimate]: https://codeclimate.com/github/AltonV/autoremote
+[coveralls]: https://coveralls.io/r/AltonV/autoremote
 [inch-ci]: http://inch-ci.org/github/AltonV/autoremote
 
 A library that makes it easier to interact with your other autoremote devices.  
