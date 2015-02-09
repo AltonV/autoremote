@@ -39,6 +39,7 @@
 <a href="https://gemnasium.com/AltonV/autoremote"><img src="http://img.shields.io/gemnasium/AltonV/autoremote.svg" alt="Dependency Status"></a>
 <a href="https://rubygems.org/gems/autoremote"><img src="https://img.shields.io/gem/dt/autoremote.svg" alt="Gem Downloads"></a>
 <a href="https://codeclimate.com/github/AltonV/autoremote"><img src="https://codeclimate.com/github/AltonV/autoremote/badges/gpa.svg" alt="Code Climate"></a>
+<a href="https://coveralls.io/r/AltonV/autoremote"><img src="https://coveralls.io/repos/AltonV/autoremote/badge.svg" alt="Coverage Status"></a>
 <a href="http://inch-ci.org/github/AltonV/autoremote"><img src="http://inch-ci.org/github/AltonV/autoremote.svg?branch=master&amp;style=shields" alt="Inline docs"></a></p>
 
 <p>A library that makes it easier to interact with your other autoremote devices.<br>
@@ -75,25 +76,28 @@ $ autoremote register NAME HOST      Register this computer to the device
 <div class="highlight highlight-ruby"><pre><span class="pl-k">require</span> <span class="pl-s1"><span class="pl-pds">'</span>autoremote<span class="pl-pds">'</span></span>
 
 <span class="pl-c"># Adding devices can be done either with the key</span>
-<span class="pl-s3">AutoRemote</span>.addDevice( name, <span class="pl-s1"><span class="pl-pds">"</span>A VERY LONG STRING OF CHARACTERS<span class="pl-pds">"</span></span> )
+<span class="pl-s3">AutoRemote</span>.add_device( name, <span class="pl-s1"><span class="pl-pds">"</span>A VERY LONG STRING OF CHARACTERS<span class="pl-pds">"</span></span> )
 <span class="pl-c"># Or with your 'goo.gl' address</span>
-<span class="pl-s3">AutoRemote</span>.addDevice( name, <span class="pl-s1"><span class="pl-pds">"</span>http://goo.gl/XXXXXX<span class="pl-pds">"</span></span> )
+<span class="pl-s3">AutoRemote</span>.add_device( name, <span class="pl-s1"><span class="pl-pds">"</span>http://goo.gl/XXXXXX<span class="pl-pds">"</span></span> )
 
 <span class="pl-c"># Removes a device</span>
-<span class="pl-s3">AutoRemote</span>.removeDevice( name )
+<span class="pl-s3">AutoRemote</span>.remove_device( name )
 
 <span class="pl-c"># List all saved devices</span>
 <span class="pl-s3">AutoRemote</span>.list
 
+<span class="pl-c"># Get a specific device</span>
+<span class="pl-s3">AutoRemote</span>.get_device( name )
+
 <span class="pl-c"># Send a message to a device</span>
 <span class="pl-c"># The parameter device can either be a Device object or the name of the device</span>
-<span class="pl-s3">AutoRemote</span>.sendMessage( device, message )
+<span class="pl-s3">AutoRemote</span>.send_message( device, message )
 
 <span class="pl-c"># Register on the device.</span>
 <span class="pl-c"># This has the same effect as following the guide on http://joaoapps.com/autoremote/linux/)</span>
 <span class="pl-c"># device can either be a Device object or the name of the device</span>
 <span class="pl-c"># host can be either a hostname or ip-address, but they have to be public (i.e. reachable from the internet)</span>
-<span class="pl-s3">AutoRemote</span>.registerOnDevice( device, host )</pre></div>
+<span class="pl-s3">AutoRemote</span>.register_on_device( device, host )</pre></div>
 
 <h2>
 <a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
